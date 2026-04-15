@@ -1,0 +1,8 @@
+{
+    "name": "u/ingenieria-software-carreras-taxi",
+    "autoload": {
+        "psr-4": {
+            "TaxiApp\\": "src/"
+        }
+    }
+}
