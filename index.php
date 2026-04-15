@@ -1,68 +1,104 @@
 <?php
 declare(strict_types=1);
 
-// ===========================================================
-// PUNTO DE ENTRADA - Front Controller
-// Conecta las capas usando el patrón de Arquitectura Hexagonal
-// ===========================================================
-
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Infrastructure/Connection.php';
+require_once __DIR__ . '/config/database.php';
 
-use TaxiApp\Infrastructure\PdoCarreraRepository;
-use TaxiApp\Application\CreateCarreraUseCase;
-use TaxiApp\Application\ListCarrerasUseCase;
-use TaxiApp\Application\FindCarreraByIdUseCase;
-use TaxiApp\Application\UpdateCarreraUseCase;
-use TaxiApp\Application\DeleteCarreraUseCase;
+use TaxiApp\Carrera\Infrastructure\Persistence\PdoCarreraRepository;
+use TaxiApp\Carrera\Application\ListCarrerasUseCase;
+use TaxiApp\Carrera\Application\DeleteCarreraUseCase;
 
-// --- Inicializar conexión e inyectar dependencias ---
-$pdo        = createPdoConnection();
-$repository = new PdoCarreraRepository($pdo);
-
-$createUseCase  = new CreateCarreraUseCase($repository);
+$repository     = new PdoCarreraRepository($pdo);
 $listUseCase    = new ListCarrerasUseCase($repository);
-$findUseCase    = new FindCarreraByIdUseCase($repository);
-$updateUseCase  = new UpdateCarreraUseCase($repository);
 $deleteUseCase  = new DeleteCarreraUseCase($repository);
 
-// --- Enrutamiento Simple por acción ---
-$action = $_GET['action'] ?? 'list';
-$error  = '';
-
-try {
-    if ($action === 'create' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $createUseCase->execute($_POST);
-        header('Location: index.php?action=list');
-        exit;
-    }
-
-    if ($action === 'update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $updateUseCase->execute((int) $_POST['id'], $_POST);
-        header('Location: index.php?action=list');
-        exit;
-    }
-
-    if ($action === 'delete' && isset($_GET['id'])) {
-        $deleteUseCase->execute((int) $_GET['id']);
-        header('Location: index.php?action=list');
-        exit;
-    }
-} catch (\InvalidArgumentException $e) {
-    $error = $e->getMessage();
-    $action = ($action === 'update') ? 'edit' : 'create';
+if (isset($_GET['delete'])) {
+    $deleteUseCase->execute((int) $_GET['delete']);
+    header('Location: index.php');
+    exit;
 }
 
-// --- Cargar Vista ---
-$carreraParaEditar = null;
-if ($action === 'edit' && isset($_GET['id'])) {
-    $carreraParaEditar = $findUseCase->execute((int) $_GET['id']);
-    if (!$carreraParaEditar) {
-        header('Location: index.php?action=list');
-        exit;
-    }
-}
+$carreras = $listUseCase->execute();
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Carreras - CarreraTaxi</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 2rem; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        h1 { color: #1a1a2e; font-size: 1.5rem; }
+        .btn-new { background: #e94560; color: white; padding: 0.6rem 1.4rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #1a1a2e; color: white; padding: 0.8rem 1rem; text-align: left; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { padding: 0.75rem 1rem; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; }
+        tr:hover td { background: #fafbff; }
+        .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+        .badge-blue  { background: #dbeafe; color: #1e40af; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .actions { display: flex; gap: 0.5rem; }
+        .btn-edit   { background: #3b82f6; color: white; padding: 0.3rem 0.7rem; border-radius: 5px; text-decoration: none; font-size: 0.78rem; }
+        .btn-delete { background: #ef4444; color: white; padding: 0.3rem 0.7rem; border-radius: 5px; text-decoration: none; font-size: 0.78rem; }
+        .btn-edit:hover   { background: #2563eb; }
+        .btn-delete:hover { background: #dc2626; }
+        .empty { text-align: center; padding: 3rem; color: #999; }
+    </style>
+</head>
+<body>
 
-$carreras = ($action === 'list') ? $listUseCase->execute() : [];
+<div class="header">
+    <h1>🚕 Listado de Carreras (<?= count($carreras) ?>)</h1>
+    <a href="registrar.php" class="btn-new">+ Nueva Carrera</a>
+</div>
 
-require_once __DIR__ . '/views/layout.php';
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Taxi</th>
+                <th>Taxista</th>
+                <th>Origen → Destino</th>
+                <th>Km</th>
+                <th>Pasajeros</th>
+                <th>Duración</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php if (empty($carreras)): ?>
+            <tr><td colspan="10" class="empty">No hay carreras registradas. <a href="registrar.php">Registrar una</a></td></tr>
+        <?php else: ?>
+            <?php foreach ($carreras as $c): ?>
+            <tr>
+                <td><?= $c->id ?></td>
+                <td><?= htmlspecialchars($c->cliente) ?></td>
+                <td><span class="badge badge-blue"><?= htmlspecialchars($c->taxi) ?></span></td>
+                <td><?= htmlspecialchars($c->taxista) ?></td>
+                <td><?= htmlspecialchars($c->barrioInicio) ?> → <?= htmlspecialchars($c->barrioLlegada) ?></td>
+                <td><?= number_format($c->kilometros, 1) ?> km</td>
+                <td><?= $c->cantidadPasajeros ?></td>
+                <td><?= $c->duracionMinutos ?> min</td>
+                <td><span class="badge badge-green">$<?= number_format($c->precio, 2) ?></span></td>
+                <td>
+                    <div class="actions">
+                        <a href="editar.php?id=<?= $c->id ?>" class="btn-edit">✏️ Editar</a>
+                        <a href="index.php?delete=<?= $c->id ?>" class="btn-delete"
+                           onclick="return confirm('¿Eliminar carrera #<?= $c->id ?>?')">🗑️ Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

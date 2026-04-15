@@ -1,5 +1,10 @@
 {
     "name": "u/ingenieria-software-carreras-taxi",
+    "description": "CRUDL de CarreraTaxi con Arquitectura Hexagonal y DDD en PHP 8",
+    "type": "project",
+    "require": {
+        "php": ">=8.1"
+    },
     "autoload": {
         "psr-4": {
             "TaxiApp\\": "src/"
