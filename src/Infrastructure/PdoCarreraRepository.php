@@ -8,44 +8,13 @@ use TaxiApp\Domain\Carrera;
 use TaxiApp\Domain\CarreraRepository;
 
 /**
- * Capa de Infraestructura: Adaptador MySQL
- * Implementa la interfaz del repositorio usando PDO.
+ * CAPA DE INFRAESTRUCTURA - Adaptador MySQL con PDO
+ * Implementa el contrato definido por el puerto CarreraRepository.
  */
 class PdoCarreraRepository implements CarreraRepository {
-    private PDO $pdo;
+    public function __construct(private PDO $pdo) {}
 
-    public function __construct(PDO $pdo) {
-        $this->pdo = $pdo;
-    }
-
-    public function save(Carrera $carrera): void {
-        $stmt = $this->pdo->prepare("
-            INSERT INTO carreras (
-                cliente, taxi, kilometros, barrioInicio, barrioLlegada, 
-                cantidadPasajeros, taxista, precio, duracionMinutos
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-
-        $stmt->execute([
-            $carrera->getCliente(),
-            $carrera->getTaxi(),
-            $carrera->getKilometros(),
-            $carrera->getBarrioInicio(),
-            $carrera->getBarrioLlegada(),
-            $carrera->getCantidadPasajeros(),
-            $carrera->getTaxista(),
-            $carrera->getPrecio(),
-            $carrera->getDuracionMinutos()
-        ]);
-    }
-
-    public function findById(int $id): ?Carrera {
-        $stmt = $this->pdo->prepare("SELECT * FROM carreras WHERE id = ?");
-        $stmt->execute([$id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$row) return null;
-
+    private function hydrate(array $row): Carrera {
         return new Carrera(
             (int) $row['id'],
             $row['cliente'],
@@ -60,26 +29,39 @@ class PdoCarreraRepository implements CarreraRepository {
         );
     }
 
+    public function save(Carrera $carrera): void {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO carreras 
+                (cliente, taxi, kilometros, barrioInicio, barrioLlegada, cantidadPasajeros, taxista, precio, duracionMinutos)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([
+            $carrera->getCliente(), $carrera->getTaxi(), $carrera->getKilometros(),
+            $carrera->getBarrioInicio(), $carrera->getBarrioLlegada(),
+            $carrera->getCantidadPasajeros(), $carrera->getTaxista(),
+            $carrera->getPrecio(), $carrera->getDuracionMinutos()
+        ]);
+    }
+
+    public function findById(int $id): ?Carrera {
+        $stmt = $this->pdo->prepare("SELECT * FROM carreras WHERE id = ?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $this->hydrate($row) : null;
+    }
+
     public function update(Carrera $carrera): void {
         $stmt = $this->pdo->prepare("
             UPDATE carreras SET 
-                cliente = ?, taxi = ?, kilometros = ?, 
-                barrioInicio = ?, barrioLlegada = ?, 
-                cantidadPasajeros = ?, taxista = ?, 
-                precio = ?, duracionMinutos = ?
-            WHERE id = ?
+                cliente=?, taxi=?, kilometros=?, barrioInicio=?, barrioLlegada=?,
+                cantidadPasajeros=?, taxista=?, precio=?, duracionMinutos=?
+            WHERE id=?
         ");
-
         $stmt->execute([
-            $carrera->getCliente(),
-            $carrera->getTaxi(),
-            $carrera->getKilometros(),
-            $carrera->getBarrioInicio(),
-            $carrera->getBarrioLlegada(),
-            $carrera->getCantidadPasajeros(),
-            $carrera->getTaxista(),
-            $carrera->getPrecio(),
-            $carrera->getDuracionMinutos(),
+            $carrera->getCliente(), $carrera->getTaxi(), $carrera->getKilometros(),
+            $carrera->getBarrioInicio(), $carrera->getBarrioLlegada(),
+            $carrera->getCantidadPasajeros(), $carrera->getTaxista(),
+            $carrera->getPrecio(), $carrera->getDuracionMinutos(),
             $carrera->getId()
         ]);
     }
@@ -90,24 +72,11 @@ class PdoCarreraRepository implements CarreraRepository {
     }
 
     public function findAll(): array {
-        $stmt = $this->pdo->query("SELECT * FROM carreras");
-        $results = [];
-
+        $stmt = $this->pdo->query("SELECT * FROM carreras ORDER BY id DESC");
+        $carreras = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $results[] = new Carrera(
-                (int) $row['id'],
-                $row['cliente'],
-                $row['taxi'],
-                (float) $row['kilometros'],
-                $row['barrioInicio'],
-                $row['barrioLlegada'],
-                (int) $row['cantidadPasajeros'],
-                $row['taxista'],
-                (float) $row['precio'],
-                (int) $row['duracionMinutos']
-            );
+            $carreras[] = $this->hydrate($row);
         }
-
-        return $results;
+        return $carreras;
     }
 }

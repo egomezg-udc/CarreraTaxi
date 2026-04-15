@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace TaxiApp\Domain;
 
 /**
- * Capa de Dominio: Puerto (Interface)
- * Define el contrato que cualquier adaptador de infraestructura debe cumplir.
+ * CAPA DE DOMINIO - Puerto/Interfaz CarreraRepository
+ * Contrato que cualquier adaptador de infraestructura debe cumplir (CRUDL).
  */
 interface CarreraRepository {
     public function save(Carrera $carrera): void;

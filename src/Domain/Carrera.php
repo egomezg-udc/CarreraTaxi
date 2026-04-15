@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace TaxiApp\Domain;
 
 /**
- * Capa de Dominio: Entidad Carrera
- * Representa el corazón del negocio con sus reglas y datos.
+ * CAPA DE DOMINIO - Entidad Carrera
+ * Core del negocio: encapsula los datos y las reglas de validación.
  */
 class Carrera {
     public function __construct(
@@ -33,9 +33,11 @@ class Carrera {
         if ($this->precio < 0) {
             throw new \InvalidArgumentException("El precio no puede ser negativo.");
         }
+        if ($this->duracionMinutos <= 0) {
+            throw new \InvalidArgumentException("La duración debe ser mayor a cero.");
+        }
     }
 
-    // Getters
     public function getId(): ?int { return $this->id; }
     public function getCliente(): string { return $this->cliente; }
     public function getTaxi(): string { return $this->taxi; }
@@ -46,19 +48,4 @@ class Carrera {
     public function getTaxista(): string { return $this->taxista; }
     public function getPrecio(): float { return $this->precio; }
     public function getDuracionMinutos(): int { return $this->duracionMinutos; }
-
-    public function toArray(): array {
-        return [
-            'id' => $this->id,
-            'cliente' => $this->cliente,
-            'taxi' => $this->taxi,
-            'kilometros' => $this->kilometros,
-            'barrioInicio' => $this->barrioInicio,
-            'barrioLlegada' => $this->barrioLlegada,
-            'cantidadPasajeros' => $this->cantidadPasajeros,
-            'taxista' => $this->taxista,
-            'precio' => $this->precio,
-            'duracionMinutos' => $this->duracionMinutos
-        ];
-    }
 }
