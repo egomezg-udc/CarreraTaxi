@@ -7,14 +7,14 @@ use TaxiApp\Domain\Carrera;
 use TaxiApp\Domain\CarreraRepository;
 
 /**
- * CAPA DE APLICACIÓN - Caso de Uso: Crear Carrera
+ * CAPA DE APLICACIÓN - Caso de Uso: Actualizar Carrera
  */
-class CreateCarreraUseCase {
+class UpdateCarreraUseCase {
     public function __construct(private CarreraRepository $repository) {}
 
-    public function execute(array $data): void {
+    public function execute(int $id, array $data): void {
         $carrera = new Carrera(
-            null,
+            $id,
             $data['cliente'],
             $data['taxi'],
             (float) $data['kilometros'],
@@ -25,6 +25,6 @@ class CreateCarreraUseCase {
             (float) $data['precio'],
             (int) $data['duracionMinutos']
         );
-        $this->repository->save($carrera);
+        $this->repository->update($carrera);
     }
 }
