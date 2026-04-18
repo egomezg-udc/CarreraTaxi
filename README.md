@@ -1,6 +1,6 @@
-# 🚕 Proyecto CarreraTaxi - Ingeniería de Software
+# 🚕 Proyecto CarreraTaxi - Desarrollo Software Web
 
-Este proyecto es el resultado del trabajo realizado para la asignatura de **Ingeniería de Software** en la **Universidad de Cartagena**. Se trata de una aplicación web desarrollada en PHP 8 que aplica conceptos avanzados como **Domain-Driven Design (DDD)** y **Arquitectura Hexagonal**, con el objetivo de gestionar las carreras de una empresa de taxis de manera eficiente y escalable.
+Este proyecto es el resultado del trabajo realizado para la asignatura de **DESARROLLO SOFTWARE WEB** en la **Universidad de Cartagena** con el profesor **Jhon Arrieta**. Se trata de una aplicación web desarrollada en PHP 8 que aplica conceptos avanzados como **Domain-Driven Design (DDD)** y **Arquitectura Hexagonal**, con el objetivo de gestionar las carreras de una empresa de taxis de manera eficiente y escalable.
 
 ---
 
@@ -8,7 +8,7 @@ Este proyecto es el resultado del trabajo realizado para la asignatura de **Inge
 
 | Campo | Detalle |
 |---|---|
-| **Asignatura** | Ingeniería de Software |
+| **Asignatura** | DESARROLLO SOFTWARE WEB |
 | **Ejercicio asignado** | CarreraTaxi |
 | **Entidad principal** | `Carrera` (cliente, taxi, kilómetros, barrioInicio, barrioLlegada, cantidadPasajeros, taxista, precio, duracionMinutos) |
 | **Arquitectura** | Hexagonal (Ports & Adapters) |
@@ -223,4 +223,5 @@ Convención de commits: **Conventional Commits** (`feat`, `fix`, `chore`, `docs`
 
 ## 📜 Licencia
 
-Proyecto académico — Universidad. Todos los derechos reservados.
+Proyecto académico — Universidad de Cartagena. Todos los derechos reservados.
+Profesor: Jhon Arrieta
