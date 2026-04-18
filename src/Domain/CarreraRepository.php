@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace TaxiApp\Domain;
 
 /**
- * CAPA DE DOMINIO - Puerto/Interfaz CarreraRepository
- * Contrato que cualquier adaptador de infraestructura debe cumplir (CRUDL).
+ * CAPA DE DOMINIO - Puerto (Interfaz)
+ * 
+ * Esta es la interfaz del repositorio. Aquí solo digo QUÉ operaciones se pueden hacer
+ * (guardar, buscar, etc.), pero no digo CÓMO se hacen (si es con MySQL, con archivos, etc.).
+ * Es el "puerto" de nuestra arquitectura hexagonal.
  */
 interface CarreraRepository {
     public function save(Carrera $carrera): void;

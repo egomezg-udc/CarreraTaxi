@@ -7,7 +7,10 @@ use TaxiApp\Domain\Carrera;
 use TaxiApp\Domain\CarreraRepository;
 
 /**
- * CAPA DE APLICACIÓN - Caso de Uso: Actualizar Carrera
+ * CAPA DE APLICACIÓN - Caso de Uso: Actualizar
+ * 
+ * Similar al de crear, pero aquí nos aseguremos de pasarle el ID existente
+ * para que el repositorio sepa qué registro debe modificar en la BD.
  */
 class UpdateCarreraUseCase {
     public function __construct(private CarreraRepository $repository) {}

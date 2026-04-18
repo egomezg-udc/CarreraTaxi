@@ -2,8 +2,9 @@
 declare(strict_types=1);
 
 // ===========================================================
-// PUNTO DE ENTRADA - Front Controller
-// Conecta las capas usando el patrón de Arquitectura Hexagonal
+// ARCHIVO PRINCIPAL - index.php
+// Este es el punto de entrada de mi aplicación (Front Controller).
+// Aquí conecto todas las capas de la Arquitectura Hexagonal que usé.
 // ===========================================================
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -17,6 +18,8 @@ use TaxiApp\Application\UpdateCarreraUseCase;
 use TaxiApp\Application\DeleteCarreraUseCase;
 
 // --- Inicializar conexión e inyectar dependencias ---
+// Aquí instancio el repositorio de MySQL y se lo paso a los Casos de Uso.
+// Esto es Inyección de Dependencias para que las capas no estén amarradas.
 $pdo        = createPdoConnection();
 $repository = new PdoCarreraRepository($pdo);
 
@@ -27,6 +30,7 @@ $updateUseCase  = new UpdateCarreraUseCase($repository);
 $deleteUseCase  = new DeleteCarreraUseCase($repository);
 
 // --- Enrutamiento Simple por acción ---
+// Uso un parámetro 'action' en la URL para saber qué quiere hacer el usuario.
 $action = $_GET['action'] ?? 'list';
 $error  = '';
 

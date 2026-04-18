@@ -8,8 +8,11 @@ use TaxiApp\Domain\Carrera;
 use TaxiApp\Domain\CarreraRepository;
 
 /**
- * CAPA DE INFRAESTRUCTURA - Adaptador MySQL con PDO
- * Implementa el contrato definido por el puerto CarreraRepository.
+ * CAPA DE INFRAESTRUCTURA - Adaptador para MySQL
+ * 
+ * Aquí es donde implementamos de verdad las operaciones de la interfaz.
+ * Uso PDO para conectarme a la base de datos y manejar los registros.
+ * Esta capa sí sabe que usamos MySQL.
  */
 class PdoCarreraRepository implements CarreraRepository {
     public function __construct(private PDO $pdo) {}
