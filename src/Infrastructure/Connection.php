@@ -2,8 +2,10 @@
 declare(strict_types=1);
 
 /**
- * CAPA DE INFRAESTRUCTURA - Fábrica de Conexión PDO
- * Crea y retorna la conexión a MySQL configurada con PDO.
+ * CAPA DE INFRAESTRUCTURA - Gestión de la Conexión
+ * 
+ * Esta función se encarga de crear el objeto PDO que usaremos en todo el proyecto.
+ * Carga la configuración de un archivo externo para que sea más fácil de cambiar.
  */
 function createPdoConnection(): PDO {
     $config = require __DIR__ . '/db_config.php';

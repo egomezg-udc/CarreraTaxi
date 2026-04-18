@@ -1,7 +1,6 @@
-# 🚕 CarreraTaxi
+# 🚕 Proyecto CarreraTaxi - Ingeniería de Software
 
-**Ingeniería de Software — Trabajo de Grado**  
-Aplicación web en PHP 8 orientada a objetos aplicando **Domain-Driven Design (DDD)** y **Arquitectura Hexagonal**.
+Este proyecto es el resultado del trabajo realizado para la asignatura de **Ingeniería de Software** en la **Universidad de Cartagena**. Se trata de una aplicación web desarrollada en PHP 8 que aplica conceptos avanzados como **Domain-Driven Design (DDD)** y **Arquitectura Hexagonal**, con el objetivo de gestionar las carreras de una empresa de taxis de manera eficiente y escalable.
 
 ---
 

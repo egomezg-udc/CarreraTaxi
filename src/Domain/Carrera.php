@@ -5,7 +5,9 @@ namespace TaxiApp\Domain;
 
 /**
  * CAPA DE DOMINIO - Entidad Carrera
- * Core del negocio: encapsula los datos y las reglas de validación.
+ * 
+ * Aquí definí la entidad principal del sistema. En esta capa no puse nada de la base de datos
+ * ni de librerías externas, solo la lógica de lo que es una "Carrera" en nuestro negocio.
  */
 class Carrera {
     public function __construct(
@@ -20,6 +22,7 @@ class Carrera {
         private float $precio,
         private int $duracionMinutos
     ) {
+        // Al crear el objeto, validamos enseguida que los datos tengan sentido
         $this->validar();
     }
 

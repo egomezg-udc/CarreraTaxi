@@ -1,9 +1,14 @@
+<!-- 
+  VISTA PRINCIPAL - layout.php
+  Esta es la única plantilla que uso. Dependiendo de la 'action', muestro la tabla o el formulario.
+  Traté de que el diseño fuera moderno pero sencillo usando CSS puro.
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarreraTaxi - CRUDL</title>
+    <title>CarreraTaxi - Gestión Académica</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
@@ -139,7 +144,7 @@
         <div class="form-card">
             <h2>➕ Registrar Nueva Carrera</h2>
             <form method="POST" action="index.php?action=create">
-                <?php require __DIR__ . '/views/form_fields.php'; ?>
+                <?php require __DIR__ . '/form_fields.php'; ?>
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Guardar Carrera</button>
                     <a href="index.php?action=list" class="btn-cancel">Cancelar</a>
@@ -152,7 +157,7 @@
             <h2>✏️ Editar Carrera #<?= $carreraParaEditar->getId() ?></h2>
             <form method="POST" action="index.php?action=update">
                 <input type="hidden" name="id" value="<?= $carreraParaEditar->getId() ?>">
-                <?php require __DIR__ . '/views/form_fields.php'; ?>
+                <?php require __DIR__ . '/form_fields.php'; ?>
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Actualizar Carrera</button>
                     <a href="index.php?action=list" class="btn-cancel">Cancelar</a>

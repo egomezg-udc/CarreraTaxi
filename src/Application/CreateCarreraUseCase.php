@@ -8,6 +8,9 @@ use TaxiApp\Domain\CarreraRepository;
 
 /**
  * CAPA DE APLICACIÓN - Caso de Uso: Crear Carrera
+ * 
+ * En esta capa es donde orquestamos todo. Recibimos los datos de la vista,
+ * creamos el objeto de dominio (Carrera) y le decimos al repositorio que lo guarde.
  */
 class CreateCarreraUseCase {
     public function __construct(private CarreraRepository $repository) {}
