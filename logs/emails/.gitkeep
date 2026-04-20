@@ -1,0 +1,2 @@
+# Este archivo hace que git rastree la carpeta logs/emails/ aunque esté en .gitignore
+# Los emails simulados no se suben al repo (son datos temporales de desarrollo)
